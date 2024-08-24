@@ -22,13 +22,20 @@ namespace TvMazeScraper.Repository
             DbContext = dbContext;
         }
 
-        public async Task<List<TvShow>> GetTvShows(int page, int take, CancellationToken cancellationToken = default) =>
-            await DbContext.TvShows
-                        .OrderBy(tv => tv.Id)
-                        .Include(tvShow => tvShow.Cast.OrderByDescending(bd => bd.Birthday))
-                        .Skip((page - 1) * take)
-                        .Take(take)
-                        .ToListAsync(cancellationToken);
+        public async Task<List<TvShow>> GetTvShows(int page, int take, CancellationToken cancellationToken = default)
+        {
+            return await DbContext.TvShows
+                .OrderBy(tv => tv.Id)
+                .Select(tv => new TvShow
+                {
+                    Id = tv.Id,
+                    Name = tv.Name,
+                    Cast = tv.Cast.OrderByDescending(p => p.Birthday).ToList()
+                })
+                .Skip((page - 1) * take)
+                .Take(take)
+                .ToListAsync(cancellationToken);
+        }
 
         public async Task InsertOrUpdate(List<TvShow> tvShows, CancellationToken cancellationToken = default)
         {

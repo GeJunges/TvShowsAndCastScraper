@@ -7,7 +7,7 @@ using TvMazeScraper.Repository.Entities;
 
 namespace TvMaze.IntegrationTests.TvMaze.Repository
 {
-    public class TvShowsRespositoryTests
+    public class TvShowsRespositoryTests : IDisposable
     {
         private readonly Mock<ILogger<TvShowsRespository>> _loggerMock;
         private readonly TvMazeSraperDbContext _dbContext;
@@ -107,5 +107,60 @@ namespace TvMaze.IntegrationTests.TvMaze.Repository
             result.Id.Should().Be(5);
         }
 
+        [Fact]
+        public async Task GetTvShows_ShouldReturnShowsOrderedByIdAndCastOrderedByBirthdayDesc()
+        {
+            // Arrange
+            var tvShows = new List<TvShow>
+            {
+                new TvShow
+                {
+                    Id = 20,
+                    Name = "Show 20",
+                    Cast = new List<Person>
+                    {
+                        new Person { Id = 14, Name = "Actor 14", Birthday = new DateOnly(1980, 1, 1) },
+                        new Person { Id = 15, Name = "Actor 15", Birthday = new DateOnly(1975, 1, 1) },
+                        new Person { Id = 16, Name = "Actor 16", Birthday = new DateOnly(1970, 1, 1) }
+                    }
+                },
+                new TvShow
+                {
+                    Id = 10,
+                    Name = "Show 10",
+                    Cast = new List<Person>
+                    {
+                        new Person { Id = 11, Name = "Actor 11", Birthday = new DateOnly(1990, 1, 1) },
+                        new Person { Id = 12, Name = "Actor 12", Birthday = new DateOnly(1985, 1, 1) },
+                        new Person { Id = 13, Name = "Actor 13", Birthday = new DateOnly(1995, 1, 1) }
+                    }
+                }
+            };
+
+            await _dbContext.TvShows.AddRangeAsync(tvShows);
+            await _dbContext.SaveChangesAsync();
+
+            // Act
+            var result = await _repository.GetTvShows(1, 10);
+
+            // Assert
+            result[0].Id.Should().Be(10);
+            result[0].Cast.Select(c => c.Birthday).Should().BeInDescendingOrder();
+            result[0].Cast[0].Birthday.Should().Be(new DateOnly(1995, 1, 1));
+            result[0].Cast[1].Birthday.Should().Be(new DateOnly(1990, 1, 1));
+            result[0].Cast[2].Birthday.Should().Be(new DateOnly(1985, 1, 1));
+
+            result[1].Id.Should().Be(20);
+            result[1].Cast.Select(c => c.Birthday).Should().BeInDescendingOrder();
+            result[1].Cast[0].Birthday.Should().Be(new DateOnly(1980, 1, 1));
+            result[1].Cast[1].Birthday.Should().Be(new DateOnly(1975, 1, 1));
+            result[1].Cast[2].Birthday.Should().Be(new DateOnly(1970, 1, 1));
+        }
+
+        public void Dispose()
+        {
+            _dbContext.TvShows.RemoveRange(_dbContext.TvShows);
+            _dbContext.SaveChanges();
+        }
     }
 }
