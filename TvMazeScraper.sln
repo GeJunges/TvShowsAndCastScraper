@@ -11,9 +11,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TvMaze.UnitTests", "TvMaze.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TvMaze.Repository", "TvMaze.Repository\TvMaze.Repository.csproj", "{2D1B75E4-5754-47D0-8006-C67F93BCE849}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TvMaze.ScraperWorker", "TvMaze.ScraperWorker\TvMaze.ScraperWorker.csproj", "{09DE779E-A63E-4A95-9CDE-9931DA191D9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TvMaze.ScraperWorker", "TvMaze.ScraperWorker\TvMaze.ScraperWorker.csproj", "{09DE779E-A63E-4A95-9CDE-9931DA191D9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TvMaze.IntegrationTests", "TvMaze.IntegrationTests\TvMaze.IntegrationTests.csproj", "{870520A0-DD3E-4898-9B84-69A89D1059AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TvMaze.IntegrationTests", "TvMaze.IntegrationTests\TvMaze.IntegrationTests.csproj", "{870520A0-DD3E-4898-9B84-69A89D1059AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{1E5677A8-E515-4C0D-BB53-914566ADA892}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
